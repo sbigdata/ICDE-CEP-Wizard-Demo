@@ -1,11 +1,21 @@
 {
   "name": "webdemo",
   "version": "0.1.0",
+  "license": "MIT",
   "private": true,
+  "homepage": "http://dmserver3.kaist.ac.kr/cep-wizard",
   "dependencies": {
+    "@material-ui/core": "^3.9.2",
+    "@material-ui/icons": "^3.0.2",
+    "axios": "^0.18.0",
+    "filepond": "^4.2.0",
+    "filepond-plugin-file-validate-type": "^1.2.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
-    "react-scripts": "2.1.1"
+    "react-filepond": "^7.0.1",
+    "react-highlight": "^0.12.0",
+    "react-scripts": "2.1.5",
+    "storm-react-diagrams": "^5.2.1"
   },
   "scripts": {
     "start": "react-scripts start",
