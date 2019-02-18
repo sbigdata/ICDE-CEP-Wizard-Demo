@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Typography from '@material-ui/core/Typography';
-import ScenarioInput from './ScenarioInput'
+import UserInput from './UserInput'
 import Topology from './Topology'
 import StormOutput from './StormOutput'
 
@@ -17,7 +17,7 @@ export default class Content extends Component {
         return (
             <div style={{ paddingLeft: 24, paddingRight: 24 }}>
                 <Typography variant="h6">1. Scenario Input</Typography>
-                <ScenarioInput setTopologyAndStormCode={this.setTopologyAndStormCode} />
+                <UserInput setTopologyAndStormCode={this.setTopologyAndStormCode} />
                 {
                     this.state.data ?
                         <React.Fragment>
