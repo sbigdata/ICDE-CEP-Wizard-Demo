@@ -16,7 +16,7 @@ export default class Content extends Component {
     render() {
         return (
             <div style={{ paddingLeft: 24, paddingRight: 24 }}>
-                <Typography variant="h6">1. Scenario Input</Typography>
+                <Typography variant="h6">1. User Input</Typography>
                 <UserInput setTopologyAndStormCode={this.setTopologyAndStormCode} />
                 {
                     this.state.data ?

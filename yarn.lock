@@ -3925,7 +3925,7 @@ filename-regex@^2.0.0:
   resolved "https://registry.yarnpkg.com/filename-regex/-/filename-regex-2.0.1.tgz#c1c4b9bee3e09725ddb106b75c1e301fe2f18b26"
   integrity sha1-wcS5vuPglyXdsQa3XB4wH+LxiyY=
 
-filepond-plugin-file-validate-type@^1.2.0:
+filepond-plugin-file-validate-type@^1.2.2:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/filepond-plugin-file-validate-type/-/filepond-plugin-file-validate-type-1.2.2.tgz#8ac215b893b6beef28d82874cddcff6cd3069451"
   integrity sha512-ZBVU9a18EWhfk3kkqULp7GX3KcSSAlZbLFqlquJ5VTerecL1BkUlQ/cpFJ5EucAdJ1Qdi1zEyPQ+e7JLxL+5Rg==

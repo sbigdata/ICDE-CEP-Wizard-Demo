@@ -9,7 +9,7 @@
     "@material-ui/icons": "^3.0.2",
     "axios": "^0.18.0",
     "filepond": "^4.2.0",
-    "filepond-plugin-file-validate-type": "^1.2.0",
+    "filepond-plugin-file-validate-type": "^1.2.2",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-filepond": "^7.0.1",
