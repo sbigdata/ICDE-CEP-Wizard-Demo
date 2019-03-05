@@ -16,6 +16,8 @@ import ScenarioInput from './ScenarioInput'
 import ParameterInput from './ParameterInput'
 import FileInput from './FileInput'
 
+const SERVER = 'http://18.233.192.106'
+
 
 export default class UserInput extends Component {
     state = {
@@ -29,7 +31,7 @@ export default class UserInput extends Component {
         clusterPreview: '',
         drlPreview: '',
         server: {
-            url: 'http://localhost:5000/upload',
+            url: `${SERVER}/upload`,
             process: {
                 onload: res => this.handlePondFile(res)
             }
@@ -68,7 +70,8 @@ export default class UserInput extends Component {
     handleChange = async ({ target }) => {
         this.setState({ isLoading: true, [target.name]: target.value })
         if (target.value > 0) {
-            let { data } = await axios.get(`http://dmserver3.kaist.ac.kr/topology/scenario/${target.value}`)
+            let { data } = await axios.get(`${SERVER}/topology/scenario/${target.value}`)
+            // let { data } = await axios.get(`http://dmserver3.kaist.ac.kr/topology/scenario/${target.value}`)
             if (data.status === 200) {
                 data.files.map(file => this.handlePondFile(file))
                 this.setState({ files: data.files })
@@ -82,25 +85,25 @@ export default class UserInput extends Component {
     handleGenerateTopoloy = async () => {
         this.props.setTopologyAndStormCode(null)
         this.setState({ isLoading: true })
-        let second = 0
-        let statusInterval = setInterval(() => {
-            second++
-            if (second < 3) {
-                this.setState({ textStatus: 'Rule Allocating...' })
-            } else if (second < 11) {
-                this.setState({ textStatus: 'Building Topology...' })
-            } else if (second < 13) {
-                this.setState({ textStatus: 'Submitting Topology...' })
-            } else if (second < 15) {
-                this.setState({ textStatus: 'Generating Sample streams...' })
-            } else {
-                this.setState({ textStatus: 'Finishing and Retrieving files...' })
-            }
-        }, 1000)
-        let { data } = await axios.post('http://dmserver3.kaist.ac.kr/topology', { scenario: this.state.scenario })
+        // let second = 0
+        // let statusInterval = setInterval(() => {
+        //     second++
+        //     if (second < 3) {
+        //         this.setState({ textStatus: 'Rule Allocating...' })
+        //     } else if (second < 11) {
+        //         this.setState({ textStatus: 'Building Topology...' })
+        //     } else if (second < 13) {
+        //         this.setState({ textStatus: 'Submitting Topology...' })
+        //     } else if (second < 15) {
+        //         this.setState({ textStatus: 'Generating Sample streams...' })
+        //     } else {
+        //         this.setState({ textStatus: 'Finishing and Retrieving files...' })
+        //     }
+        // }, 1000)
+        let { data } = await axios.post(`${SERVER}/topology`, { scenario: this.state.scenario })
         if (data.status === 200) {
-            clearInterval(statusInterval)
-            this.props.setTopologyAndStormCode(data)
+            // clearInterval(statusInterval)
+            this.props.setTopologyAndStormCode(data.data)
         } else {
             alert(data.message)
         }

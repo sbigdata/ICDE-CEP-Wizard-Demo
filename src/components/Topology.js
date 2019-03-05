@@ -11,12 +11,12 @@ export default class Topology extends Component {
   state = {
     openRuleModal: false,
     currentRuleDetail: null,
-    roundRobin: {
-      engine: new DiagramEngine(),
-      model: new DiagramModel(),
-      nodes: [],
-      links: [],
-    },
+    // roundRobin: {
+    //   engine: new DiagramEngine(),
+    //   model: new DiagramModel(),
+    //   nodes: [],
+    //   links: [],
+    // },
     greedy: {
       engine: new DiagramEngine(),
       model: new DiagramModel(),
@@ -27,29 +27,29 @@ export default class Topology extends Component {
   }
 
   componentWillMount() {
-    const { roundRobin, greedy } = this.state
+    const { greedy } = this.state
 
-    roundRobin.engine.installDefaultFactories()
+    // roundRobin.engine.installDefaultFactories()
     greedy.engine.installDefaultFactories()
 
-    let roundRobinModels = this.buildTopology('roundRobin')
+    // let roundRobinModels = this.buildTopology('roundRobin')
     let greedyModels = this.buildTopology('greedy')
 
-    roundRobinModels.forEach(item => { item.addListener({ selectionChanged: this.onSelectRoundRobinNode }) })
+    // roundRobinModels.forEach(item => { item.addListener({ selectionChanged: this.onSelectRoundRobinNode }) })
     greedyModels.forEach(item => { item.addListener({ selectionChanged: this.onSelectGreedyNode }) })
 
-    roundRobin.engine.setDiagramModel(roundRobin.model)
+    // roundRobin.engine.setDiagramModel(roundRobin.model)
     greedy.engine.setDiagramModel(greedy.model)
   }
 
   componentDidMount() {
-    this.state.roundRobin.engine.zoomToFit()
+    // this.state.roundRobin.engine.zoomToFit()
     this.state.greedy.engine.zoomToFit()
   }
 
   buildTopology = algo => {
     let { nodes, links, model } = this.state[algo]
-    let { streamDist, topology, jsonFile } = this.state.topologyData[algo]
+    let { streamDist, topology, jsonFile } = this.state.topologyData
     let ports = []
 
     for (let index = 0; index < topology.engine_num; index++) {
@@ -87,19 +87,18 @@ export default class Topology extends Component {
     return model.addAll(...nodes, ...links)
   }
 
-  onSelectRoundRobinNode = ({ entity: { name, selected } }) => {
-    if (selected && name) {
-      let { ruleSets } = this.state.topologyData.roundRobin
-      if (name.indexOf('Machine') !== -1 && ruleSets[Number(name.split(' ')[1])]) {
-        this.handleOpenModal(ruleSets[Number(name.split(' ')[1])].replace(/\n{5}/g, '\n'))
-      }
-    }
-  }
+  // onSelectRoundRobinNode = ({ entity: { name, selected } }) => {
+  //   if (selected && name) {
+  //     let { ruleSets } = this.state.topologyData.roundRobin
+  //     if (name.indexOf('Machine') !== -1 && ruleSets[Number(name.split(' ')[1])]) {
+  //       this.handleOpenModal(ruleSets[Number(name.split(' ')[1])].replace(/\n{5}/g, '\n'))
+  //     }
+  //   }
+  // }
 
   onSelectGreedyNode = ({ entity: { name, selected } }) => {
     if (selected && name) {
-      let { ruleSets } = this.state.topologyData.greedy
-      console.log(typeof (name))
+      let { ruleSets } = this.state.topologyData
       if (name.indexOf('Machine') !== -1 && ruleSets[Number(name.split(' ')[1])]) {
         this.handleOpenModal(ruleSets[Number(name.split(' ')[1])].replace(/\n{5}/g, '\n'))
       }
@@ -120,12 +119,7 @@ export default class Topology extends Component {
     return (
       <React.Fragment>
         <Grid container spacing={24} style={{ marginBottom: 24 }}>
-          <Grid item xs={6}>
-            <Typography variant="subtitle1">Baseline</Typography>
-            <DiagramWidget maxNumberPointsPerLink={0} diagramEngine={this.state.roundRobin.engine} />
-          </Grid>
-          <Grid item xs={6}>
-            <Typography variant="subtitle1">Proposed Algorithm</Typography>
+          <Grid item xs={12}>
             <DiagramWidget maxNumberPointsPerLink={0} diagramEngine={this.state.greedy.engine} />
           </Grid>
         </Grid>

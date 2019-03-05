@@ -18,8 +18,8 @@ export default class ScenarioInput extends Component {
                             <InputLabel shrink htmlFor="scenario-label"> Scenario </InputLabel>
                             <Select value={scenario} onChange={onSelectScenario} input={<Input name="scenario" id="scenario-label" />} displayEmpty name="scenario" >
                                 <MenuItem disabled value={-1}>Select a Scenario</MenuItem>
-                                <MenuItem value={2}>Scenario 1 (DTG Data)</MenuItem>
-                                <MenuItem value={1}>Scenario 2 (Synthetic Data)</MenuItem>
+                                {/* <MenuItem value={2}>Scenario 1 (DTG Data)</MenuItem> */}
+                                <MenuItem value={1}>Synthetic Data</MenuItem>
                             </Select>
                         </FormControl>
                     </form>
