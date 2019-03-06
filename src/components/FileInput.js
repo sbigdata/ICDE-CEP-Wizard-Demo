@@ -9,7 +9,7 @@ registerPlugin(FilePondPluginFileValidateType)
 
 export default class FileInput extends Component {
     detechFileType = (source, type) => new Promise((resolve, reject) => {
-        if (['json', 'drl'].includes(source.name.split('.')[1])) {
+        if (['json'].includes(source.name.split('.')[1])) {
             resolve('.' + source.name.split('.')[1])
         } else {
             reject()
@@ -21,7 +21,7 @@ export default class FileInput extends Component {
         return (
             <Grid container spacing={24}>
                 <Grid item xs={12}>
-                    <FilePond acceptedFileTypes={['.json', '.drl']} fileValidateTypeDetectType={this.detechFileType} ref={ref => this.pond = ref} allowMultiple={true} maxFiles={2} server={server} oninit={onInit} onupdatefiles={onUpdateFile}>
+                    <FilePond acceptedFileTypes={['.json']} fileValidateTypeDetectType={this.detechFileType} ref={ref => this.pond = ref} allowMultiple={true} maxFiles={1} server={server} oninit={onInit} onupdatefiles={onUpdateFile}>
                         {
                             files.map(file => (
                                 <File key={file} src={file} origin="local" />
