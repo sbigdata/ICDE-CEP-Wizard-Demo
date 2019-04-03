@@ -6,21 +6,22 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Highlight from 'react-highlight'
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-
+// import Radio from '@material-ui/core/Radio';
+// import RadioGroup from '@material-ui/core/RadioGroup';
+// import FormControlLabel from '@material-ui/core/FormControlLabel';
+// import FormControl from '@material-ui/core/FormControl';
+// import FormLabel from '@material-ui/core/FormLabel';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import ParameterInput from './ParameterInput'
 import FileInput from './FileInput'
+import specification from '../specification'
 
 const SERVER = 'http://18.233.192.106'
 
 export default class UserInput extends Component {
     state = {
         files: [],
-        inputType: 'file-input',
+        inputType: 'form-input',
         isLoading: false,
         scenario: -1,
         textStatus: '',
@@ -34,11 +35,22 @@ export default class UserInput extends Component {
             }
         },
         specification: {
-            input_rates: [{ 'At0': 0.05 }],
-            stream_names: [{ 'At0_Name': 'At0' }],
-            data_types: [{ 'At0': 'Double' }],
-            number_of_streams: 1,
-            number_of_machines: 1
+            input_rates: specification.input_rates,
+            stream_names: specification.attribute_names,
+            // data_types: [{ 'At0': 'Double' }],
+            number_of_streams: specification.number_of_attributes,
+            number_of_machines: specification.number_of_workers
+        },
+        completed: 0
+    }
+
+    progress = (isComplete = false) => {
+        const { completed } = this.state
+        if (isComplete) {
+            this.setState({ completed: 100 })
+        } else {
+            const diff = 0.717
+            this.setState({ completed: completed + diff })
         }
     }
 
@@ -66,6 +78,7 @@ export default class UserInput extends Component {
     }
 
     handleGenerateTopoloy = async () => {
+        this.timer = setInterval(this.progress, 300)
         this.props.setTopologyAndStormCode(null)
         this.setState({ isLoading: true })
         let value = null
@@ -77,6 +90,8 @@ export default class UserInput extends Component {
 
         let { data } = await axios.post(`${SERVER}/topology`, { value, inputType: this.state.inputType })
         if (data.status === 200) {
+            clearInterval(this.timer)
+            this.progress(true)
             this.props.setTopologyAndStormCode(data.data)
         } else {
             alert(data.message)
@@ -108,13 +123,13 @@ export default class UserInput extends Component {
         return (
             <Grid container spacing={24}>
                 <Grid item xs={12}>
-                    <FormControl component="fieldset">
+                    {/* <FormControl component="fieldset">
                         <FormLabel component="legend">Select Input Method</FormLabel>
                         <RadioGroup style={{ flexDirection: 'row' }} aria-label="Input Type" name="input-type" value={this.state.inputType} onChange={this.handleInputChange} >
                             <FormControlLabel value='file-input' control={<Radio />} label="File Upload" />
                             <FormControlLabel value='form-input' control={<Radio />} label="Form Input" />
                         </RadioGroup>
-                    </FormControl>
+                    </FormControl> */}
                     {
                         this.state.inputType === 'file-input' ? <FileInput files={this.state.files} server={this.state.server} onInit={this.handleInit} onUpdateFile={this.handleUpdateFile} /> : <ParameterInput onConfirmData={this.handleConfirmData} specification={this.state.specification} />
                     }
@@ -146,7 +161,7 @@ export default class UserInput extends Component {
                         }
                     </Grid>
                     <Grid item xs={4}>
-                        {this.state.textStatus}
+                        <LinearProgress variant="determinate" value={this.state.completed} />
                         <Button style={{ marginBottom: 48 }} disabled={((this.state.inputType === 'file-input' && this.state.dataPreview === '') && this.state.inputType !== 'form-input') || this.state.isLoading} variant="contained" color="primary" onClick={this.handleGenerateTopoloy} fullWidth> {this.state.isLoading ? 'Generating Topology, Please Wait!' : 'Generate Topology!'}</Button>
                     </Grid>
                 </Grid>

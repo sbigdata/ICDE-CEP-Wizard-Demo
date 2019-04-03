@@ -22,11 +22,12 @@ export default class StormOutput extends Component {
 	componentDidMount() {
 		let realtimeLogs = this.state.realtimeLogs.slice()
 		setInterval(() => {
-			database.ref('/storm').once('value', snapshot => {
+			database.ref('/storm').orderByKey().once('value', snapshot => {
+				realtimeLogs = []
 				snapshot.forEach(log => {
 					realtimeLogs.unshift(`${log.key} -> ${log.val().message}`)
 				})
-				this.setState({ realtimeLogs })
+				this.setState({ realtimeLogs: realtimeLogs.slice(0, 500) })
 			})
 		}, 1000)
 	}
@@ -41,6 +42,15 @@ export default class StormOutput extends Component {
 			alert(data.message)
 		}
 		this.setState({ isLoading: false })
+	}
+
+	renderResources = engine_num => {
+		let resources = []
+		for (let index = 0; index < engine_num; index++) {
+			resources.push(<IconWithText level={3}><Folder style={{ marginRight: 8 }} /> <Typography variant='body1'>rulesets{index}</Typography></IconWithText>)
+		}
+
+		return resources
 	}
 
 	render() {
@@ -65,12 +75,9 @@ export default class StormOutput extends Component {
 						<IconWithText level={3}><Casino style={{ marginRight: 8 }} /> <Typography variant='body1'>com.yooju.storm.stormdrools</Typography></IconWithText>
 						<IconWithText level={4}><InsertDriveFile style={{ marginRight: 8 }} /> <Typography variant='body1'>RATopology.java</Typography></IconWithText>
 						<IconWithText level={2}><Folder style={{ marginRight: 8 }} /> <Typography variant='body1'>resources</Typography></IconWithText>
-						<IconWithText level={3}><Folder style={{ marginRight: 8 }} /> <Typography variant='body1'>rulesets0</Typography></IconWithText>
-						<IconWithText level={3}><Folder style={{ marginRight: 8 }} /> <Typography variant='body1'>rulesets1</Typography></IconWithText>
-						<IconWithText level={3}><Folder style={{ marginRight: 8 }} /> <Typography variant='body1'>rulesets2</Typography></IconWithText>
-						<IconWithText level={3}><Folder style={{ marginRight: 8 }} /> <Typography variant='body1'>rulesets3</Typography></IconWithText>
-						<IconWithText level={3}><Folder style={{ marginRight: 8 }} /> <Typography variant='body1'>rulesets4</Typography></IconWithText>
-
+						{
+							this.renderResources(this.props.topologyData.topology.engine_num)
+						}
 						<IconWithText level={3}><InsertDriveFile style={{ marginRight: 8 }} /> <Typography variant='body1'>EngineDist.json</Typography></IconWithText>
 						<IconWithText level={3}><InsertDriveFile style={{ marginRight: 8 }} /> <Typography variant='body1'>StreamDist.json</Typography></IconWithText>
 						<IconWithText level={3}><InsertDriveFile style={{ marginRight: 8 }} /> <Typography variant='body1'>Topology.json</Typography></IconWithText>
